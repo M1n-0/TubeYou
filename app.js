@@ -31,7 +31,7 @@ app.get('/video', (req, res) => {
         return res.status(500).send('Erreur serveur');
       }
   
-      // Filtrer uniquement les fichiers vidéo (extension .mp4, etc.)
+      // Filtrer uniquement les fichiers vidéo
       const videos = files.filter(file => file.endsWith('.mp4'));
       res.json(videos);
     });
