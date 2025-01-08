@@ -1,20 +1,45 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>TubeYou</title>
-    <link rel="stylesheet" href="assets/css/index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste de Vidéos</title>
+  <link rel="stylesheet" href="assets/css/index.css">
 </head>
 <body>
+  <h1>Test list Vidéo</h1>
+  <ul id="videoList"></ul>
 
-<h1>Test Vidéo</h1>
+  <div id="videoPlayer" style="margin-top: 20px;">
+    <video id="player" controls width="640"></video>
+  </div>
 
-<video controls width="800" poster="aled.jpg">
-    <source src="video.mp4" type="video/mp4">
-    <source src="video.webm" type="video/webm">
-    <track src="sous-titres.vtt" kind="subtitles" srclang="fr" label="Français">
-    Votre navigateur ne supporte pas la vidéo.
-</video>
-<script src="video.js"></script>
+  <script>
+    // Récupérer la liste des vidéos depuis le serveur
+    fetch('/videos')
+      .then(response => response.json())
+      .then(videos => {
+        const videoList = document.getElementById('videoList');
+
+        videos.forEach(video => {
+          const listItem = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = `video/${video}`;
+          link.textContent = video;
+          link.style.cursor = 'pointer';
+
+          link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const player = document.getElementById('player');
+            player.src = event.target.href;
+            player.play();
+          });
+
+          listItem.appendChild(link);
+          videoList.appendChild(listItem);
+        });
+      })
+      .catch(error => console.error('Erreur lors de la récupération des vidéos:', error));
+  </script>
 </body>
 </html>

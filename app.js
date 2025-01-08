@@ -6,10 +6,10 @@ const app = express();
 const port = 4000;
 
 // Dossier où sont stockées les vidéos
-const videoDir = path.join(__dirname, 'video');
+const videoFolder = path.join(__dirname, 'video');
 
 // Permettre l'accès aux fichiers statiques (vidéos, images)
-app.use('/video', express.static(videoDir));
+app.use('/video', express.static(videoFolder));
 app.use(express.static('public')); // Pour servir votre fichier HTML
 
 // Charge les fichiers du dossier assets.
@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 
 // Route pour récupérer la liste des vidéos
 app.get('/api/videos', (req, res) => {
-    fs.readdir(videoDir, (err, files) => {
+    fs.readdir(videoFolder, (err, files) => {
         if (err) {
             return res.status(500).json({ error: 'Erreur lors de la lecture du dossier' });
         }
