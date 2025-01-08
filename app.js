@@ -24,25 +24,18 @@ app.get('/', (req, res) => {
 });
 
 // Route pour récupérer la liste des vidéos
-app.get('/api/videos', (req, res) => {
+app.get('/video', (req, res) => {
     fs.readdir(videoFolder, (err, files) => {
-        if (err) {
-            return res.status(500).json({ error: 'Erreur lors de la lecture du dossier' });
-        }
-
-        const videos = files.filter(file => {
-            return file.endsWith('.mp4') || file.endsWith('.webm') || file.endsWith('.ogg');
-        }).map(file => {
-            return {
-                name: path.parse(file).name,
-                src: '/video/' + file,
-                poster: '/video/' + path.parse(file).name + '.jpg'
-            };
-        });
-
-        res.json(videos);
+      if (err) {
+        console.error('Erreur lors de la lecture du dossier vidéo:', err);
+        return res.status(500).send('Erreur serveur');
+      }
+  
+      // Filtrer uniquement les fichiers vidéo (extension .mp4, etc.)
+      const videos = files.filter(file => file.endsWith('.mp4'));
+      res.json(videos);
     });
-});
+  });
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`TubeYou listening at http://localhost:${port}`);
